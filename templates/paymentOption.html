@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body>
+    <h1>Complete Your Payment</h1>
+    <p>Booking ID: {{ booking.id }}</p> <!-- Use booking.id instead of booking.booking_id -->
+    <p>Amount: ₹{{ amount }}</p>
+
+    <form action="{% url 'booking_success' booking.id %}" method="POST" id="razorpay-form">
+        {% csrf_token %}
+        <script
+            src="https://checkout.razorpay.com/v1/checkout.js"
+            data-key="{{ razorpay_key }}"
+            data-amount="{{ amount|floatformat:2|add:"00" }}"  <!-- Ensure amount is in paise -->
+            data-currency="INR"
+            data-order_id="{{ payment_order_id }}"
+            data-buttontext="Pay Now"
+            data-name="NaviBook"
+            data-description="Payment for Booking"
+            data-theme.color="#528ff0">
+        </script>
+        <input type="hidden" name="razorpay_order_id" value="{{ payment_order_id }}">
+    </form>
+</body>
+</html>

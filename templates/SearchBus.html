@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Selection</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-image: url('https://www.shutterstock.com/image-photo/white-modern-comfortable-tourist-bus-600nw-1654594828.jpg');
+            background-size: cover;
+        }
+
+        .overlay {
+            background-color: rgba(0, 0, 0, 0.35);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            background-color: #efbd60d7;
+            color: black;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header .back-btn {
+            position: absolute;
+            left: 20px;
+            top: 15px;
+            font-size: 20px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .bus-container {
+            padding: 20px;
+        }
+
+        .bus-list {
+            background-color: rgba(0, 0, 0, 0.55); /* Lighter transparency */
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(108, 94, 94, 0.8);
+}
+
+
+        .bus-list h4 {
+            color: white;
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .bus-list p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: rgb(162, 161, 161);
+        }
+
+        .bus-list .timing {
+            color: white;
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .bus-list .timing .price {
+            font-weight: bold;
+            color: white;
+        }
+
+        .seat-selection {
+            background-color: #efbd60d7;
+            color: black;
+            border: none;
+            padding: 10px;
+            margin-top: 10px;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .seat-selection:hover{
+            background-color: #f7d5ba;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Background Overlay for Dim Effect 
+    <div class="overlay"></div>
+
+   
+    <div class="content">
+    
+        <div class="header">
+            <a href="#" class="back-btn">&#8592;</a>
+            <span>Rajkot to Ahmedabad</span><br>
+            <span>Date, Day</span>
+        </div>
+
+      
+        <div class="bus-container">
+            <div class="bus-list">
+                <h4>Patel Travels</h4>
+                <p>Volvo A/C Sleeper</p>
+                <div class="timing">
+                    <span>10:15 AM</span>
+                    <span>4h 40m</span>
+                    <span>14:55 PM</span>
+                    <span class="price">₹ 450</span>
+                </div>
+                <form action="login_bus.html" method="GET">
+                    <button class="seat-selection">Select Seat</button>
+                </form>  
+            </div>
+
+            <div class="bus-list">
+                <h4>Ramraj Travels</h4>
+                <p>Volvo A/C Seater</p>
+                <div class="timing">
+                    <span>17:00 PM</span>
+                    <span>4h 50m</span>
+                    <span>21:50 PM</span>
+                    <span class="price">₹ 400</span>
+                </div>
+                <form action="SelectBusSeat.html" method="GET">
+                    <button class="seat-selection">Select Seat</button>
+                </form>
+            </div>
+
+            <div class="bus-list">
+                <h4>Pooja Travels</h4>
+                <p>Volvo Seater</p>
+                <div class="timing">
+                    <span>11:00 AM</span>
+                    <span>5h 00m</span>
+                    <span>15:55 PM</span>
+                    <span class="price">₹ 389</span>
+                </div>
+                <form action="SelectBusSeat.html" method="GET">
+                    <button class="seat-selection">Select Seat</button>
+                </form>
+            </div>
+
+            <div class="bus-list">
+                <h4>Umiya Travels</h4>
+                <p>Volvo A/C Sleeper</p>
+                <div class="timing">
+                    <span>16:30 PM</span>
+                    <span>4h 30m</span>
+                    <span>21:00 PM</span>
+                    <span class="price">₹ 460</span>
+                </div>
+                <form action="SelectBusSeat.html" method="GET">
+                    <button class="seat-selection">Select Seat</button>
+                </form>
+            </div>
+        </div>
+    </div> -->
+
+    <!-- SearchBus.html -->
+<div class="overlay"></div>
+<div class="content">
+    <div class="header">
+        <a href="{% url 'homepage' %}" class="back-btn">&#8592;</a>
+        <span>{{ source }} to {{ destination }}</span><br>
+        <span>{{ travel_date }}</span>
+    </div>
+
+    <div class="bus-container">
+        {% if buses %}
+            {% for bus in buses %}
+            <div class="bus-list">
+                <h4>{{ bus.operator_name }}</h4>
+                <p>{{ bus.class_type }}</p>
+                <div class="timing">
+                    <span>{{ bus.departure_time }}</span>
+                    <span>{{ bus.arrival_time }}</span>
+                    <span>{{ bus.price }}</span>
+                </div>
+                <form action="{% url 'selectbusseat' bus.id %}" method="GET">
+                    {% csrf_token %}
+                    <button class="seat-selection">Select Seat</button>
+                </form>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No buses found for the given criteria.</p>
+        {% endif %}
+    </div>
+</div>
+</body>
+</html>

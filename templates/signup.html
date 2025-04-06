@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NaviBook - Sign Up</title>
+    {% load static %}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body, html {
+            height: 100%;
+        }
+
+        body {
+            background-image: url("{% static 'images/background.png' %}");
+            background-size: cover;
+            background-position: center;
+            background-color: rgb(190, 222, 236);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: rgba(0, 0, 0, 0.6);
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            padding: 30px;
+            border-radius: 20px;
+            color: white;
+        }
+
+        .container h1 {
+            font-size: 3em;
+            color: #ffa500;
+            margin-bottom: 20px;
+        }
+
+        .container h2 {
+            color: #ffa500;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        .input-box {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            background-color: #111010;
+            padding: 10px;
+            border-radius: 30px;
+        }
+
+        .input-box input {
+            width: 85%;
+            padding: 10px;
+            border: none;
+            background: none;
+            color: white;
+            font-size: 1em;
+            outline: none;
+        }
+
+        .input-box i {
+            color: orange;
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+
+        .btn {
+            width: 100%;
+            background-color: orange;
+            color: black;
+            padding: 10px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .btn:hover {
+            background-color: #f7d5ba;
+        }
+
+        .forgot {
+            color: white;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .sign-up {
+            color: white;
+            font-size: 1em;
+        }
+
+        .sign-up a {
+            color: purple;
+            text-decoration: none;
+        }
+
+        .sign-up a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>NaviBook</h1>
+        <h2>-- Travel Here --</h2>
+        <h3>SIGN UP</h3>
+
+        <form action="{% url 'signup' %}" method="POST" onsubmit="return validateForm()">
+            {% csrf_token %}
+            
+            <!-- Username -->
+            <div class="input-box">
+                <i class="fas fa-user"></i>
+                <input type="text" id="username" name="username" placeholder="Username" required>
+            </div>
+            <span id="usernameError" style="color: red;"></span>
+
+            <!-- Email -->
+            <div class="input-box">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="email" name="email" placeholder="Email id" required>
+            </div>
+            <span id="emailError" style="color: red;"></span>
+
+            <!-- Password -->
+            <div class="input-box">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="password" name="password" placeholder="Password" required>
+            </div>
+            <span id="passwordError" style="color: red;"></span>
+
+            <!-- Confirm Password -->
+            <div class="input-box">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="confirmPassword" name="confirm_password" placeholder="Confirm Password" required>
+            </div>
+            <span id="confirmPasswordError" style="color: red;"></span>
+
+            <button class="btn">Sign Up</button>
+        </form>
+            
+        <a href="{% url 'login' %}" class="forgot">Already have an account? Login</a>
+    </div>
+
+    <script>
+        function validateForm() {
+            // Clear previous error messages
+            document.getElementById("usernameError").innerText = "";
+            document.getElementById("emailError").innerText = "";
+            document.getElementById("passwordError").innerText = "";
+            document.getElementById("confirmPasswordError").innerText = "";
+        
+            var isValid = true;
+        
+            // Get form values
+            var username = document.getElementById("username").value.trim();
+            var email = document.getElementById("email").value.trim().toLowerCase();  // Convert to lowercase
+            var password = document.getElementById("password").value.trim();
+            var confirmPassword = document.getElementById("confirmPassword").value.trim();
+        
+            // Username validation (must not be empty)
+            if (username === "") {
+                document.getElementById("usernameError").innerText = "Username is required.";
+                isValid = false;
+            }
+        
+            // Email validation (must be in a valid email format)
+            var emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!emailPattern.test(email)) {
+                document.getElementById("emailError").innerText = "Please enter a valid email address.";
+                isValid = false;
+            }
+        
+            // Password validation (must not be empty and must be at least 6 characters long)
+            if (password === "") {
+                document.getElementById("passwordError").innerText = "Password is required.";
+                isValid = false;
+            } else if (password.length < 6) {
+                document.getElementById("passwordError").innerText = "Password must be at least 6 characters long.";
+                isValid = false;
+            }
+        
+            // Confirm password validation (must match password)
+            if (confirmPassword === "") {
+                document.getElementById("confirmPasswordError").innerText = "Please confirm your password.";
+                isValid = false;
+            } else if (confirmPassword !== password) {
+                document.getElementById("confirmPasswordError").innerText = "Passwords do not match.";
+                isValid = false;
+            }
+        
+            return isValid;
+        }
+    </script>
+</body>
+</html>

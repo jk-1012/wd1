@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NaviBook - Traveller Details</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgb(190, 222, 236);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .form-container {
+            background-color: rgba(54, 48, 48, 0.8);
+            padding: 30px;
+            border-radius: 10px;
+            width: 600px;
+        }
+
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            background-color: #f8c159d7;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 18px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            font-size: 16px;
+            margin-top: 5px;
+        }
+
+        .form-group input[type="radio"], .form-group input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+        }
+
+        .form-group .radio-label {
+            display: inline;
+            margin-right: 20px;
+            font-size: 16px;
+            color: white;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #efbd60d7;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .submit-btn:hover {
+            background-color: #f7d5ba;
+        }
+
+        .error {
+            color: red;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Enter Traveller Details</h2>
+        <form id="travellerForm" action="{% url 'confirm_booking' booking.id %}" method="POST">
+            {% csrf_token %}
+            <!-- Passenger Details for Each Selected Seat -->
+            {% for seat in seat_numbers %}
+            <div class="form-group">
+                <label for="passenger_name_{{ seat }}">Passenger Name</label>
+                <input type="text" id="passenger_name_{{ seat }}" name="passenger_name_{{ seat }}" placeholder="Enter passenger name" required>
+                <div class="error" id="nameError_{{ seat }}"></div>
+            </div>
+        
+            <div class="form-group">
+                <label for="passenger_age_{{ seat }}">Passenger Age  </label>
+                <input type="number" id="passenger_age_{{ seat }}" name="passenger_age_{{ seat }}" placeholder="Enter passenger age" required>
+                <div class="error" id="ageError_{{ seat }}"></div>
+            </div>
+        
+            <div class="form-group">
+                <label for="gender_{{ seat }}">Passenger Gender </label>
+                <div>
+                    <label class="radio-label">
+                        <input type="radio" name="gender_{{ seat }}" value="Male" required> Male
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="gender_{{ seat }}" value="Female"> Female
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="gender_{{ seat }}" value="Other"> Other
+                    </label>
+                </div>
+            </div>
+        
+            <!-- Add Mobile Number Field for Each Passenger -->
+            <div class="form-group">
+                <label for="passenger_mobile_{{ seat }}">Passenger Mobile No </label>
+                <input type="tel" id="passenger_mobile_{{ seat }}" name="passenger_mobile_{{ seat }}" placeholder="Enter passenger mobile number" pattern="[0-9]{10}" required>
+                <div class="error" id="mobileError_{{ seat }}"></div>
+            </div>
+        
+            {% endfor %}
+        
+
+            <!-- Submit Button -->
+            <button type="submit" class="submit-btn">Submit</button>
+        </form>
+    </div>
+    <script>
+        // Function to validate the mobile number format for Indian numbers
+        function validateMobileNumber(seat) {
+            // Get the mobile number input value for the current seat
+            var mobileNumber = document.getElementById('passenger_mobile_' + seat).value;
+            
+            // Regular Expression to check if the mobile number is 10 digits and starts with 7, 8, or 9
+            var mobilePattern = /^[789][0-9]{9}$/;
+            
+            // Get the error div for the current seat
+            var errorDiv = document.getElementById('mobileError_' + seat);
+    
+            // Check if the mobile number matches the pattern
+            if (!mobilePattern.test(mobileNumber)) {
+                // Display error message if the number doesn't match
+                errorDiv.textContent = 'Please enter a valid 10-digit Indian mobile number starting with 7, 8, or 9.';
+                return false; // Invalid mobile number
+            } else {
+                // Clear error message if the number is valid
+                errorDiv.textContent = '';
+                return true; // Valid mobile number
+            }
+        }
+    
+        // Event listener to validate each mobile number when the form is submitted
+        document.getElementById('travellerForm').addEventListener('submit', function (event) {
+            var isValid = true;
+            
+            // Loop through each seat to validate mobile numbers
+            {% for seat in seat_numbers %}
+                if (!validateMobileNumber({{ seat }})) {
+                    isValid = false;
+                }
+            {% endfor %}
+            
+            // Prevent form submission if any mobile number is invalid
+            if (!isValid) {
+                event.preventDefault();
+            }
+        });
+    </script>
+    
+</body>
+</html>

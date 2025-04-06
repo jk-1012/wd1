@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Selection</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-image: url('https://images.pexels.com/photos/5071155/pexels-photo-5071155.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+            background-size: cover;
+        }
+
+        .overlay {
+            background-color: rgba(0, 0, 0, 0.3);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            background-color: #efbd60d7;
+            color: black;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header .back-btn {
+            position: absolute;
+            left: 20px;
+            top: 15px;
+            font-size: 20px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .flight-container {
+            padding: 20px;
+        }
+
+        .flight-list {
+            background-color: rgba(0, 0, 0, 0.45); /* Lighter transparency */
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(108, 94, 94, 0.7);
+}
+
+
+        .flight-list h4 {
+            color: white;
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .flight-list p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: rgb(162, 161, 161);
+        }
+
+        .flight-list .timing {
+            color: white;
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .flight-list .timing .price {
+            font-weight: bold;
+            color: white;
+        }
+
+        .seat-selection {
+            background-color: #efbd60d7;
+            color: black;
+            border: none;
+            padding: 10px;
+            margin-top: 10px;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .seat-selection:hover{
+            background-color: #f7d5ba;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Background Overlay for Dim Effect 
+    <div class="overlay"></div>
+
+    
+    <div class="content">
+        
+        <div class="header">
+            <a href="#" class="back-btn">&#8592;</a>
+            <span>Rajkot to Ahmedabad</span><br>
+            <span>Date, Day</span>
+        </div>
+
+       
+        <div class="flight-container">
+            <div class="flight-list">
+                <h4>Delta Airlines</h4>
+                <p>Economy Class</p>
+                <div class="timing">
+                    <span>06:30 AM</span>
+                    <span>5h 45m</span>
+                    <span>12:15 PM</span>
+                    <span class="price">$250</span>
+                </div>
+                <form action="SelectFlightSeat.html" method="GET">
+                    <button class="seat-selection">Select Seat</button>
+                </form>
+            </div>
+
+            <div class="flight-list">
+                <h4>United Airlines</h4>
+                <p>Business Class</p>
+                <div class="timing">
+                    <span>09:15 AM</span>
+                    <span>5h 50m</span>
+                    <span>03:05 PM</span>
+                    <span class="price">$450</span>
+                </div>
+                <form action="SelectFlightSeat.html" method="GET">
+                    <button class="seat-selection">Select Seat</button>
+                </form>
+            </div>
+
+            <div class="flight-list">
+                <h4>American Airlines</h4>
+                <p>First Class</p>
+                <div class="timing">
+                    <span>12:00 PM</span>
+                    <span>5h 55m</span>
+                    <span>06:00 PM</span>
+                    <span class="price">$600</span>
+                </div>
+                <form action="SelectFlightSeat.html" method="GET">
+                    <button class="seat-selection">Select Seat</button>
+                </form>
+            </div>
+
+            <div class="flight-list">
+                <h4>Southwest Airlines</h4>
+                <p>Economy Class</p>
+                <div class="timing">
+                    <span>03:30 PM</span>
+                    <span>6h 00m</span>
+                    <span>09:30 PM</span>
+                    <span class="price">$180</span>
+                </div>
+                <form action="SelectFlightSeat.html" method="GET">
+                    <button class="seat-selection">Select Seat</button>
+                </form>
+            </div>
+        </div>
+    </div>-->
+
+    <div class="overlay"></div>
+<div class="content">
+    <div class="header">
+        <a href="{% url 'homepage' %}" class="back-btn">&#8592;</a>
+        <span>{{ source }} to {{ destination }}</span><br>
+        <span>{{ travel_date }}</span>
+    </div>
+
+    <div class="flight-container">
+        {% if flights %}
+            {% for flight in flights %}
+            <div class="flight-list">
+                <h4>{{ flight.airline_name }}</h4>
+                <p>{{ flight.class_type }}</p>
+                <div class="timing">
+                    <span>{{ flight.departure_time }}</span>
+                    <span>{{ flight.arrival_time }}</span>
+                    <span class="price">${{ flight.price }}</span>
+                </div>
+                <form action="{% url 'selectflightseat' flight.id %}" method="GET">
+                    <button class="seat-selection">Select Seat</button>
+                </form>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No flights found for the given criteria.</p>
+        {% endif %}
+    </div>
+</div>
+
+</body>
+</html>

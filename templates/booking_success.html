@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Success</title>
+</head>
+<body>
+    <h1>Booking Successful!</h1>
+    <p>Your booking has been confirmed.</p>
+    <p>Booking ID: {{ booking.id }}</p>
+    <p>Total Price: ₹{{ booking.total_price }}</p>
+    <a href="{% url 'homepage' %}">Go to Home</a>
+</body>
+</html>

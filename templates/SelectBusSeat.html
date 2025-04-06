@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Seat Booking</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+            background-image: url('https://www.shutterstock.com/image-photo/white-modern-comfortable-tourist-bus-600nw-1654594828.jpg');
+            background-size: cover;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.2); 
+            z-index: 0;
+        }
+
+        .content {
+            color: white;
+            display: flex;
+            width: 100%;
+            z-index: 1;
+        }
+
+        .navbar {
+            width: 25%;
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-right: 2px solid #000;
+        }
+
+        .navbar h2 {
+            margin-bottom: 20px;
+            font-size: 1.4em;
+        }
+
+        .seat-info {
+            height: 40px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            
+        }
+
+        .seat-info img {
+            width: 40px;
+            margin-right: 10px;
+        }
+
+        .seat-selection {
+            width: 75%;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+
+        .seat-selection h2 {
+            font-size: 1.6em;
+            margin-bottom: 20px;
+        }
+
+        .travel-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border: 2px solid white; /* White border with a thickness of 2px */
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .seats-grid {
+            display: flex;
+            border: 2px solid white; /* White border with a thickness of 2px */
+            justify-content: space-between;
+        }
+
+        .berth-section {
+            width: 49%;
+            border: 2px solid white; /* White border with a thickness of 2px */
+            background-color: rgba(0, 0, 0, 0.45);
+            padding: 10px;
+            border: 2px solid rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+        }
+
+        .berth-title {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+            
+        }
+
+        .berth-part {
+            display: flex;
+            justify-content: space-evenly;
+            margin-bottom: 10px;
+            gap: 0px; /* Reduced the gap for a smaller space between seat parts */
+        }
+
+        .seats {
+            display: grid;
+            grid-template-rows: repeat(6, 1fr);
+            grid-gap: 10px;
+            justify-items: center;
+        }
+
+        .seats.left {
+            grid-template-columns: repeat(2, 1fr); /* 2 columns */
+        }
+
+        .seats.right {
+            grid-template-columns: repeat(3, 1fr); /* 3 columns */
+        }
+
+        .seat {
+            width: 40px;
+            height: 40px;
+            border: 2px solid rgba(183, 174, 174, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .seat.selected {
+            background-color: #efbd60d7;
+        }
+
+        .seat.disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .book-btn {
+            width: 100%;
+            background-color: #efbd60d7;
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            display: none; /* Initially hidden */
+        }
+
+        .book-btn:hover {
+            background-color: #f7d5ba;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Overlay 
+    <div class="overlay"></div>
+
+    
+    <div class="content">
+        <div class="navbar">
+            <h2>Know about seat types</h2>
+
+            <div class="seat-info">
+                <img src="https://icons.veryicon.com/png/o/miscellaneous/official-icon-of-flying-pig/seat-3.png">
+                <span>Already booked</span>
+            </div>
+            <div class="seat-info">
+                <img src="https://icons.veryicon.com/png/o/miscellaneous/linear-icon-25/seat-2.png">
+                <span>Available</span>
+            </div>
+            <div class="seat-info">
+                <img src="https://icons.veryicon.com/png/o/miscellaneous/cook-design-catering-b-end-icon-library/seat-1.png">
+                <span>Selected by you</span>
+            </div>
+            
+        </div>
+
+        <div class="seat-selection">
+            <h2>Select your seats</h2>
+
+            <div class="travel-info">
+                <div>
+                    <h3>Patel Travels</h3>
+                    <p>Volvo A/C Sleeper</p>
+                </div>
+                <div>
+                    <p>10:15 AM &mdash; 14:15 PM</p>
+                    <p>₹ xxx</p>
+                </div>
+            </div>
+
+            <div class="seats-grid">
+                <div class="berth-section">
+                    <div class="berth-title">Lower Berth</div>
+                    <div class="berth-part">
+                        <div class="seats left" id="lower-left">
+                            
+                        </div>
+                        <div class="seats right" id="lower-right">
+                            
+                        </div>
+                    </div>
+                </div>
+
+                <div class="berth-section">
+                    <div class="berth-title">Upper Berth</div>
+                    <div class="berth-part">
+                        <div class="seats left" id="upper-left">
+                            
+                        </div>
+                        <div class="seats right" id="upper-right">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+            <form action="info.html" method="get">
+                <button class="book-btn" id="book-btn">Book</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const maxSeats = 5;
+        let selectedSeats = 0;
+        const bookButton = document.getElementById('book-btn');
+
+        // Function to generate seat layout dynamically
+        function generateSeats(containerId, cols) {
+            const container = document.getElementById(containerId);
+            const numRows = 6;
+
+            for (let row = 0; row < numRows; row++) {
+                for (let col = 0; col < cols; col++) {
+                    const seat = document.createElement('div');
+                    seat.classList.add('seat');
+                    seat.dataset.index = `${containerId}-${row}-${col}`;
+                    seat.addEventListener('click', toggleSeatSelection);
+                    container.appendChild(seat);
+                }
+            }
+        }
+
+        // Function to handle seat selection
+        function toggleSeatSelection(e) {
+            const seat = e.target;
+            if (seat.classList.contains('disabled')) return;
+
+            if (seat.classList.contains('selected')) {
+                seat.classList.remove('selected');
+                selectedSeats;
+            } else {
+                if (selectedSeats < maxSeats) {
+                    seat.classList.add('selected');
+                    selectedSeats++;
+                } else {
+                    alert('You can select up to 5 seats only!');
+                    return;
+                }
+            }
+
+            // Show or hide the Book button
+            bookButton.style.display = selectedSeats > 0 ? 'block' : 'none';
+        }
+
+        // Generate seat layout for each berth (left and right parts)
+        generateSeats('lower-left', 2); // 2 columns for left lower berth
+        generateSeats('lower-right', 3); // 3 columns for right lower berth
+        generateSeats('upper-left', 2); // 2 columns for left upper berth
+        generateSeats('upper-right', 3); // 3 columns for right upper berth
+    </script> -->
+    <!-- SelectBusSeat.html -->
+    <div class="overlay"></div>
+    <div class="content">
+        <div class="navbar">
+            <h2>Know about seat types</h2>
+            <div class="seat-info">
+                <img src="/static/images/booked.png">
+                <span>Already booked</span>
+            </div>
+            <div class="seat-info">
+                <img src="/static/images/available.png">
+                <span>Available</span>
+            </div>
+            <div class="seat-info">
+                <img src="/static/images/selected.png">
+                <span>Selected by you</span>
+            </div>
+        </div>
+    
+        <div class="seat-selection">
+            <h2>Select your seats</h2>
+            <div class="travel-info">
+                <div>
+                    <h3>{{ bus.operator_name }}</h3>
+                    <p>{{ bus.class_type }}</p>
+                </div>
+                <div>
+                    <p>{{ bus.departure_time }} &mdash; {{ bus.arrival_time }}</p>
+                    <p>&#8377;{{ bus.price }}</p>
+                </div>
+            </div>
+    
+            <div class="seats-grid">
+                {% for berth_type, seats in seat_layout.items %}
+                <div class="berth-section">
+                    <div class="berth-title">{{ berth_type }}</div>
+                    <div class="berth-part">
+                        {% for seat in seats %}
+                        <div class="seat {% if seat.status == 'booked' %}disabled{% endif %}" data-seat-id="{{ seat.id }}">
+                            {{ seat.number }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+    
+            <div class="total-price">
+                <h4>Total Price: <span id="total-price">₹0</span></h4>
+            </div>
+    
+            <form action="{% url 'passengerinfo' booking.id %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="selected_seats" id="selected-seats">
+                <button class="book-btn" id="book-btn" style="display: none;">Book</button>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        const maxSeats = 5;
+        const pricePerSeat = {{ bus.price }}; // Assuming bus.price is the price per seat
+        let selectedSeats = [];
+        const bookButton = document.getElementById('book-btn');
+        const selectedSeatsInput = document.getElementById('selected-seats');
+        const totalPriceElement = document.getElementById('total-price');
+    
+        document.querySelectorAll('.seat').forEach(seat => {
+            seat.addEventListener('click', () => {
+                if (seat.classList.contains('disabled')) return;
+    
+                const seatId = seat.dataset.seatId;
+    
+                if (seat.classList.contains('selected')) {
+                    seat.classList.remove('selected');
+                    selectedSeats = selectedSeats.filter(id => id !== seatId);
+                } else {
+                    if (selectedSeats.length < maxSeats) {
+                        seat.classList.add('selected');
+                        selectedSeats.push(seatId);
+                    } else {
+                        alert('You can select up to 5 seats only!');
+                    }
+                }
+    
+                // Update the book button visibility
+                bookButton.style.display = selectedSeats.length > 0 ? 'block' : 'none';
+                selectedSeatsInput.value = selectedSeats.join(',');
+    
+                // Calculate and display the total price
+                const totalPrice = selectedSeats.length * pricePerSeat;
+                totalPriceElement.textContent = '₹' + totalPrice;
+            });
+        });
+    </script>
+    
+    </body>
+    </html>

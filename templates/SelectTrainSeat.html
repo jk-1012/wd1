@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Train Seat Booking</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+            background-image: url('https://images.pexels.com/photos/28838150/pexels-photo-28838150/free-photo-of-scenic-mountain-train-station-with-blue-train.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+            background-size: cover;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.2);
+            z-index: 0;
+        }
+
+        .content {
+            color: white;
+            display: flex;
+            width: 100%;
+            z-index: 1;
+        }
+
+        .navbar {
+            width: 25%;
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-right: 2px solid #000;
+        }
+
+        .navbar h2 {
+            margin-bottom: 20px;
+            font-size: 1.4em;
+        }
+
+        .seat-info {
+            height: 40px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .seat-info img {
+            width: 40px;
+            margin-right: 10px;
+        }
+
+        .seat-selection {
+            width: 75%;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+
+        .seat-selection h2 {
+            font-size: 1.6em;
+            margin-bottom: 20px;
+        }
+
+        .travel-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border: 2px solid white; /* White border with a thickness of 2px */
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .seats-grid {
+            display: flex;
+            border: 2px solid white; /* White border with a thickness of 2px */
+            justify-content: space-between;
+            flex-wrap: wrap; /* Allow wrapping to ensure proper layout */
+        }
+
+        .berth-section {
+            width: 24%; /* Adjust width for four sections in one row */
+            background-color: rgba(0, 0, 0, 0.45);
+            padding: 10px;
+            border: 2px solid rgba(183, 174, 174, 0.7);
+            border-radius: 10px;
+            margin: 1px; /* Optional: space between berth sections */
+        }
+
+        .berth-title {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .seats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* 2 columns */
+            grid-template-rows: repeat(6, 1fr); /* 6 rows */
+            grid-gap: 10px;
+            justify-items: center;
+        }
+
+        .seat {
+            width: 40px;
+            height: 40px;
+            border: 2px solid rgba(183, 174, 174, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .seat.selected {
+            background-color: #efbd60d7;
+        }
+
+        .seat.disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .book-btn {
+            width: 100%;
+            background-color: #efbd60d7;
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .book-btn:hover {
+            background-color: #f7d5ba;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Overlay 
+    <div class="overlay"></div>
+
+    
+    <div class="content">
+        <div class="navbar">
+            <h2>Know about seat types</h2>
+
+            <div class="seat-info">
+                <img src="https://icons.veryicon.com/png/o/miscellaneous/official-icon-of-flying-pig/seat-3.png">
+                <span>Already booked</span>
+            </div>
+            <div class="seat-info">
+                <img src="https://icons.veryicon.com/png/o/miscellaneous/linear-icon-25/seat-2.png">
+                <span>Available</span>
+            </div>
+            <div class="seat-info">
+                <img src="https://icons.veryicon.com/png/o/miscellaneous/cook-design-catering-b-end-icon-library/seat-1.png">
+                <span>Selected by you</span>
+            </div>
+        </div>
+
+        <div class="seat-selection">
+            <h2>Select your seats</h2>
+
+            <div class="travel-info">
+                <div>
+                    <h3>Rajdhani Express</h3>
+                    <p>1st Class A/C Sleeper</p>
+                </div>
+                <div>
+                    <p>9:30 AM &mdash; 13:30 PM</p>
+                    <p>₹ xxx</p>
+                </div>
+            </div>
+
+            <div class="seats-grid">
+                <div class="berth-section">
+                    <div class="berth-title">Upper Berth</div>
+                    <div class="seats" id="upper-berth">
+                        
+                    </div>
+                </div>
+
+                <div class="berth-section">
+                    <div class="berth-title">Lower Berth</div>
+                    <div class="seats" id="lower-berth">
+                        
+                    </div>
+                </div>
+
+                <div class="berth-section">
+                    <div class="berth-title">Middle Berth</div>
+                    <div class="seats" id="middle-berth">
+                        
+                    </div>
+                </div>
+
+                <div class="berth-section">
+                    <div class="berth-title">Side Berth</div>
+                    <div class="seats" id="side-berth">
+                        
+                    </div>
+                </div>
+            </div>
+
+            
+            <form action="info.html" method="get">
+                <button class="book-btn" id="book-btn">Book</button>
+            </form>
+        </div>
+    </div>-->
+
+    <div class="overlay"></div>
+<div class="content">
+    <div class="navbar">
+        <h2>Know about seat types</h2>
+        <div class="seat-info">
+            <img src="/static/images/booked.png" alt="Booked">
+            <span>Already booked</span>
+        </div>
+        <div class="seat-info">
+            <img src="/static/images/available.png" alt="Available">
+            <span>Available</span>
+        </div>
+        <div class="seat-info">
+            <img src="/static/images/selected.png" alt="Selected">
+            <span>Selected by you</span>
+        </div>
+    </div>
+
+    <div class="seat-selection">
+        <h2>Select your seats</h2>
+        <div class="travel-info">
+            <div>
+                <h3>{{ train.train_name }}</h3>
+                <p>{{ train.class_type }}</p>
+            </div>
+            <div>
+                <p>{{ train.departure_time }} &mdash; {{ train.arrival_time }}</p>
+                <p>&#8377;{{ train.price }}</p>
+            </div>
+        </div>
+
+        <div class="seats-grid">
+            {% for berth_type, seats in seat_layout.items %}
+            <div class="berth-section">
+                <div class="berth-title">{{ berth_type }}</div>
+                <div class="seats">
+                    {% for seat in seats %}
+                    <div class="seat {% if seat.status == 'booked' %}disabled{% endif %}" data-seat-id="{{ seat.id }}">
+                        {{ seat.seat_number }}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <form action="{% url 'passengerinfo' booking.id %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="selected_seats" id="selected-seats">
+            <button class="book-btn" id="book-btn">Book</button>
+        </form>
+    </div>
+</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const maxSeats = 5;
+            let selectedSeats = 0;
+            const bookButton = document.getElementById('book-btn');
+            const selectedSeatsInput = document.getElementById('selected-seats');
+        
+            document.querySelectorAll('.seat').forEach(seat => {
+                seat.addEventListener('click', function () {
+                    if (!this.classList.contains('disabled')) {
+                        if (this.classList.contains('selected')) {
+                            this.classList.remove('selected');
+                            selectedSeats--;
+                        } else {
+                            if (selectedSeats < maxSeats) {
+                                this.classList.add('selected');
+                                selectedSeats++;
+                            } else {
+                                alert('You can select up to 5 seats only!');
+                            }
+                        }
+        
+                        // Update the visibility of the Book button
+                        bookButton.style.display = selectedSeats > 0 ? 'block' : 'none';
+        
+                        // Update the hidden input with selected seats
+                        const selectedSeatIds = Array.from(document.querySelectorAll('.seat.selected'))
+                            .map(seat => seat.dataset.seatId);
+                        selectedSeatsInput.value = selectedSeatIds.join(',');
+                    }
+                });
+            });
+        });
+        
+        
+    </script>
+</body>
+</html>

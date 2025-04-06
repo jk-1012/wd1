@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NaviBook - Flight Booking</title>
+    {% load static %}
+    <style>
+        /* Reset default margin and padding */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Styling for body */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: black;
+            color: white;
+        }
+
+        /* Navbar styles */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: black;
+            padding: 0.5em 2em;
+        }
+
+        .navbar-logo {
+            display: flex;
+            align-items: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .navbar-logo img {
+            width: 50px;
+            height: auto;
+            margin-right: 10px;
+        }
+
+        /* Navbar menu styles (left-aligned) */
+        .navbar-menu {
+            list-style: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-menu li {
+            margin-left: 20px;
+            position: relative;
+        }
+
+        .navbar-menu li a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar-menu li a i {
+            margin-right: 8px; /* Space between icon and text */
+        }
+
+        .navbar-menu li a:hover {
+            background-color: #555;
+        }
+
+        /* Login/Signup styling (right-aligned) */
+        .auth-links {
+            margin-left: auto;
+            color: white;
+        }
+
+        .auth-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 15px;
+            padding-bottom: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .auth-links a:hover {
+            color: orange;
+            text-decoration: underline; /* Underline effect on hover */
+        }
+
+        /* Flight booking form section styles */
+        .hero {
+            background-image: url('https://images.pexels.com/photos/5071155/pexels-photo-5071155.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+            background-size: cover;
+            background-position: center;
+            height: 90vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .container {
+            background-color: rgba(54, 48, 48, 0.8);
+            width: 100%;
+            max-width: 600px;
+            border: 2px solid white; /* White border with a thickness of 2px */
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 8px rgba(54, 48, 48, 0.6);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        p {
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid white;
+            color: white;
+            padding: 10px 0;
+        }
+
+        .input-group img {
+            width: 30px;
+            margin-right: 10px;
+        }
+
+        .input-group input {
+            border: none;
+            outline: none;
+            text-align: left;
+            background: none;
+            flex: 1;
+            color: white;
+            font-size: 1em;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #efbd60d7;
+            border: 2px solid #333;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #f7d5ba;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero h2 {
+                font-size: 24px;
+            }
+        }
+
+    </style>
+
+    <!-- Add FontAwesome for icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Navbar Section -->
+    <header class="navbar">
+        <div class="navbar-logo">
+            <img src="C:\Users\HP\Downloads\DALL·E 2024-10-13 14.38.08 - A logo for 'NaviBook', featuring a modern and sleek design. The logo should include an abstract symbol of navigation (like a compass or a map pin) com.webp">
+            NaviBook
+        </div>
+        <ul class="navbar-menu">
+            <li><a href="{% url 'homepage' %}"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="{% url 'bus' %}"><i class="fas fa-bus"></i> Bus</a></li>
+            <li><a href="{% url 'train' %}"><i class="fas fa-train"></i> Train</a></li>
+            <li><a href="{% url 'flight' %}"><i class="fas fa-plane"></i> Flight</a></li>
+            <li><a href="{% url 'searchplaces' %}"><i class="fas fa-map-marker-alt"></i> Search Places</a></li>
+            <li><a href="{% url 'aboutus' %}"><i class="fas fa-info-circle"></i> About Us</a></li>
+        </ul>
+        <div class="auth-links">
+            {% if user.is_authenticated %}
+            <!-- Show username if user is logged in -->
+            <a href="#">{{ user.username }}</a>
+        <!--<a href="{% url 'logout' %}">Logout</a>-->
+        {% else %}
+            <!-- Show Login and Sign Up if user is not logged in -->
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'signup' %}">Sign Up</a>
+        {% endif %}
+        </div>
+    </header>
+    
+    <!-- Middle Section (Flight Booking Form) -->
+    <section class="hero">
+        <div class="container">
+            <h1>Online Flight Ticket Booking</h1>
+            <p>Find the best flight deals</p>
+
+            <!-- Search Flight Form -->
+            <form action="{% url 'searchflight' %}" method="GET">
+                {% csrf_token %}
+                <!-- Source Airport -->
+                <div class="input-group">
+                    <img src="https://icon-library.com/images/white-airplane-icon/white-airplane-icon-11.jpg" alt="Flight Icon">
+                    <input type="text" name="source" placeholder="Source airport" required>
+                </div>
+
+                <!-- Destination Airport -->
+                <div class="input-group">
+                    <img src="https://icon-library.com/images/white-airplane-icon/white-airplane-icon-11.jpg" alt="Flight Icon">
+                    <input type="text" name="destination" placeholder="Destination airport" required>
+                </div>
+
+                <!-- Date -->
+                <div class="input-group">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKK5d6C483Niuu6H9wvIBrceL3kK-LjuD-5Q&s" alt="Calendar Icon">
+                    <input type="date" name="travel_date" required>
+                </div>
+
+                <!-- Search Button -->
+                <button type="submit">Search Flight</button>
+            </form>
+        </div>
+    </section>
+
+</body>
+</html>

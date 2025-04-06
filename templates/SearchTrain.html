@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Train Selection</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-image: url('https://images.pexels.com/photos/28838150/pexels-photo-28838150/free-photo-of-scenic-mountain-train-station-with-blue-train.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+            background-size: cover;
+        }
+
+        .overlay {
+            background-color: rgba(0, 0, 0, 0.3);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            background-color: #efbd60d7;
+            color: black;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header .back-btn {
+            position: absolute;
+            left: 20px;
+            top: 15px;
+            font-size: 20px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .train-container {
+            padding: 20px;
+        }
+
+        .train-list {
+            background-color: rgba(0, 0, 0, 0.45); /* Lighter transparency */
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(108, 94, 94, 0.7);
+}
+
+
+        .train-list h4 {
+            color: white;
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .train-list p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: rgb(162, 161, 161);
+        }
+
+        .train-list .timing {
+            color: white;
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .train-list .timing .price {
+            font-weight: bold;
+            color: white;
+        }
+
+        .seat-selection {
+            background-color: #efbd60d7;
+            color: black;
+            border: none;
+            padding: 10px;
+            margin-top: 10px;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .seat-selection:hover{
+            background-color: #f7d5ba;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Background Overlay for Dim Effect 
+    <div class="overlay"></div>
+
+   
+    <div class="content">
+        
+        <div class="header">
+            <a href="#" class="back-btn">&#8592;</a>
+            <span>Rajkot to Ahmedabad</span><br>
+            <span>Date, Day</span>
+        </div>
+
+        <div class="train-container">
+            <div class="train-list">
+                <h4>Saurashtra Express</h4>
+                <p>Sleeper Class</p>
+                <div class="timing">
+                    <span>08:30 AM</span>
+                    <span>6h 00m</span>
+                    <span>14:30 PM</span>
+                    <span class="price">₹ 320</span>
+                </div>
+                <form action="SelectTrainSeat.html" method="GET">
+                    <button class="seat-selection">Select Seat</button>
+                </form>
+            </div>
+
+            <div class="train-list">
+                <h4>Rajdhani Express</h4>
+                <p>AC 2-Tier</p>
+                <div class="timing">
+                    <span>10:00 AM</span>
+                    <span>5h 00m</span>
+                    <span>15:00 PM</span>
+                    <span class="price">₹ 480</span>
+                </div>
+                <form action="SelectTrainSeat.html" method="GET">
+                    <button class="seat-selection">Select Seat</button>
+                </form>
+            </div>
+
+            <div class="train-list">
+                <h4>Kutch Express</h4>
+                <p>AC 3-Tier</p>
+                <div class="timing">
+                    <span>12:15 PM</span>
+                    <span>5h 15m</span>
+                    <span>17:30 PM</span>
+                    <span class="price">₹ 550</span>
+                </div>
+                <form action="SelectTrainSeat.html" method="GET">
+                    <button class="seat-selection">Select Seat</button>
+                </form>
+            </div>
+
+            <div class="train-list">
+                <h4>Saurashtra Mail</h4>
+                <p>General Class</p>
+                <div class="timing">
+                    <span>18:45 PM</span>
+                    <span>5h 10m</span>
+                    <span>23:55 AM</span>
+                    <span class="price">₹ 350</span>
+                </div>
+                <form action="SelectTrainSeat.html" method="GET">
+                    <button class="seat-selection">Select Seat</button>
+                </form>
+            </div>
+        </div>
+    </div>-->
+
+<div class="overlay"></div>
+<div class="content">
+    <div class="header">
+        <a href="{% url 'homepage' %}" class="back-btn">&#8592;</a>
+        <span>{{ source }} to {{ destination }}</span><br>
+        <span>{{ travel_date }}</span>
+    </div>
+
+    <div class="train-container">
+        {% if trains %}
+            {% for train in trains %}
+            <div class="train-list">
+                <h4>{{ train.train_name }}</h4>
+                <p>{{ train.class_type }}</p>
+                <div class="timing">
+                    <span>{{ train.departure_time }}</span>
+                    <span>{{ train.arrival_time }}</span>
+                    <span class="price">&#8377; {{ train.price }}</span>
+                </div>
+                <form action="{% url 'selecttrainseat' train.id %}" method="GET">
+                    {% csrf_token %}
+                    <button class="seat-selection">Select Seat</button>
+                </form>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No trains found for the given criteria.</p>
+        {% endif %}
+    </div>
+</div>
+
+</body>
+</html>
