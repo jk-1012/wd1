@@ -242,6 +242,10 @@
             <img src="/static/images/selected.png" alt="Selected">
             <span>Selected by you</span>
         </div>
+        <div class="seat-info" style="cursor: pointer;" onclick="window.location.href='{% url 'train_crew_info' train.id %}'">
+            <img src="/static/images/crew-icon.png">
+            <span>Crew Information</span>
+        </div>
     </div>
 
     <div class="seat-selection">

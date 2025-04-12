@@ -27,4 +27,7 @@ urlpatterns = [
     path('booking-success/<int:booking_id>/', views.booking_success, name='booking_success'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('search-place/', views.search_place, name='search_place'),
+    path('driver-info/<int:bus_id>/', views.driver_info, name='driver_info'),
+    path('train-crew-info/<int:train_id>/', views.train_crew_info, name='train_crew_info'),
+    path('flight-crew-info/<int:flight_id>/', views.flight_crew_info, name='flight_crew_info'),
 ]

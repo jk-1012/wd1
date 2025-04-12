@@ -171,7 +171,7 @@ def get_seat_layout(seat_availability):
     }
 
 # Select Bus Seat
-#def selectbusseat(request, bus_id):
+def selectbusseat(request, bus_id):
     bus = get_object_or_404(Bus, id=bus_id)
     seat_availability = SeatAvailability.objects.filter(bus_id=bus_id)
 
@@ -203,7 +203,7 @@ def get_seat_layout(seat_availability):
         'seat_layout': get_seat_layout(seat_availability),
         'booking': booking,
     })
-def selectbusseat(request, bus_id):
+#def selectbusseat(request, bus_id):
     bus = get_object_or_404(Bus, pk=bus_id)
 
     if request.method == 'POST':
@@ -229,7 +229,7 @@ def selectbusseat(request, bus_id):
     return render(request, 'SelectBusSeat.html', context)
 
 # Select Train Seat
-#def selecttrainseat(request, train_id):
+def selecttrainseat(request, train_id):
     train = get_object_or_404(Train, id=train_id)
     seat_availability = SeatAvailability.objects.filter(train_id=train_id)
 
@@ -259,7 +259,7 @@ def selectbusseat(request, bus_id):
         'seat_layout': get_seat_layout(seat_availability),
         'booking': booking,
     })
-def selecttrainseat(request, train_id):
+#def selecttrainseat(request, train_id):
     train = get_object_or_404(Train, pk=train_id)
 
     if request.method == 'POST':
@@ -285,7 +285,7 @@ def selecttrainseat(request, train_id):
 
 
 # Select Flight Seat
-#def selectflightseat(request, flight_id):
+def selectflightseat(request, flight_id):
     flight = get_object_or_404(Flight, id=flight_id)
     seat_availability = SeatAvailability.objects.filter(flight_id=flight_id)
 
@@ -315,7 +315,7 @@ def selecttrainseat(request, train_id):
         'seat_layout': get_seat_layout(seat_availability),
         'booking': booking,
     })
-def selectflightseat(request, flight_id):
+#def selectflightseat(request, flight_id):
     flight = get_object_or_404(Flight, pk=flight_id)
 
     if request.method == 'POST':
@@ -463,3 +463,20 @@ def search_place(request):
         'attractions': attractions,
         'selected_city': selected_city
     })
+
+
+
+def driver_info(request, bus_id):
+    bus = get_object_or_404(Bus, id=bus_id)
+    drivers = bus.drivers.all()
+    return render(request, 'driver-info.html', {'bus': bus, 'drivers': drivers})
+
+def train_crew_info(request, train_id):
+    train = get_object_or_404(Train, id=train_id)
+    crew = train.crew.all()
+    return render(request, 'train-crew-info.html', {'train': train, 'crew': crew})
+
+def flight_crew_info(request, flight_id):
+    flight = get_object_or_404(Flight, id=flight_id)
+    crew = flight.crew.all()
+    return render(request, 'flight-crew-info.html', {'flight': flight, 'crew': crew})

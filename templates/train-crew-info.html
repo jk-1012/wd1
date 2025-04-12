@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Train Crew Information</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-image: url('https://images.pexels.com/photos/28838150/pexels-photo-28838150/free-photo-of-scenic-mountain-train-station-with-blue-train.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      backdrop-filter: blur(3px);
+      color: #fff;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 50px auto;
+      background-color: rgba(0, 0, 0, 0.55);
+      padding: 30px;
+      border-radius: 10px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: white;
+    }
+
+    h2 {
+      margin-top: 30px;
+      margin-bottom: 15px;
+      color: #ddd;
+      border-bottom: 1px solid #888;
+      padding-bottom: 5px;
+    }
+
+    .train-info {
+      text-align: center;
+      margin-bottom: 20px;
+      padding: 10px;
+      background-color: rgba(0, 0, 0, 0.3);
+      border-radius: 5px;
+    }
+
+    .crew-form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .form-group {
+      display: flex;
+      align-items: center;
+    }
+
+    .form-group label {
+      flex: 0 0 200px;
+      font-weight: bold;
+      margin-right: 10px;
+      color: white;
+    }
+
+    .form-group input {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #aaa;
+      border-radius: 5px;
+      color: white;
+      background-color: rgba(33, 32, 32, 0.55);
+    }
+
+    .crew-section {
+      margin-bottom: 30px;
+      padding: 15px;
+      background-color: rgba(0, 0, 0, 0.3);
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Train Crew Information</h1>
+    
+    <div class="train-info">
+      <h3>{{ train.train_name }}</h3>
+      <p>{{ train.source }} to {{ train.destination }}</p>
+      <p>Departure: {{ train.departure_time }} | Arrival: {{ train.arrival_time }}</p>
+    </div>
+
+    {% for crew_member in crew %}
+    <div class="crew-section">
+      <h2>{{ crew_member.role|title }} Information</h2>
+      <div class="crew-form">
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" value="{{ crew_member.name }}" readonly />
+        </div>
+
+        <div class="form-group">
+          <label>Age</label>
+          <input type="text" value="{{ crew_member.age }}" readonly />
+        </div>
+
+        <div class="form-group">
+          <label>Experience</label>
+          <input type="text" value="{{ crew_member.experience_years }} years" readonly />
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</body>
+</html>

@@ -162,3 +162,26 @@ class Attraction(models.Model):
 
     def __str__(self):
         return self.name
+    
+class BusDriver(models.Model):
+    bus = models.ForeignKey(Bus, on_delete=models.CASCADE, related_name='drivers')
+    name = models.CharField(max_length=100)
+    age = models.IntegerField()
+    license_number = models.CharField(max_length=20)
+    license_expiry = models.DateField()
+    experience_years = models.IntegerField()
+    rating = models.IntegerField(default=4)  # 1-5 scale
+
+class TrainCrew(models.Model):
+    train = models.ForeignKey(Train, on_delete=models.CASCADE, related_name='crew')
+    name = models.CharField(max_length=100)
+    age = models.IntegerField()
+    role = models.CharField(max_length=50)  # 'driver', 'manager', etc.
+    experience_years = models.IntegerField()
+
+class FlightCrew(models.Model):
+    flight = models.ForeignKey(Flight, on_delete=models.CASCADE, related_name='crew')
+    name = models.CharField(max_length=100)
+    age = models.IntegerField()
+    role = models.CharField(max_length=50)  # 'captain', 'first officer', etc.
+    experience_years = models.IntegerField()
