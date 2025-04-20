@@ -80,6 +80,18 @@
       background-color: rgba(0, 0, 0, 0.3);
       border-radius: 5px;
     }
+
+    .back-button {
+      display: block;
+      width: 100px;
+      margin: 20px auto 0;
+      padding: 8px;
+      background-color: #efbd60d7;
+      color: white;
+      text-align: center;
+      border-radius: 5px;
+      text-decoration: none;
+    }
   </style>
 </head>
 <body>
@@ -113,6 +125,7 @@
       </div>
     </div>
     {% endfor %}
+    <a href="javascript:history.back()" class="back-button">Back</a>
   </div>
 </body>
 </html>
