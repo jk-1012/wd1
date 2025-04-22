@@ -1,10 +1,10 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NaviBook - Bus Booking</title>
-    {% load static %}
     <style>
         /* Reset default margin and padding */
         * {
@@ -183,8 +183,8 @@
     <!-- Navbar Section -->
     <header class="navbar">
         <div class="navbar-logo">
-            <img src="C:\Users\HP\Downloads\DALL·E 2024-10-13 14.38.08 - A logo for 'NaviBook', featuring a modern and sleek design. The logo should include an abstract symbol of navigation (like a compass or a map pin) com.webp">
-            NaviBook
+            <img src="{% static 'logo.png' %}">
+                        NaviBook
         </div>
         <ul class="navbar-menu">
             <li><a href="{% url 'homepage' %}"><i class="fas fa-home"></i> Home</a></li>
